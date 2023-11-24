@@ -1,0 +1,52 @@
+{% extends 'portfoliov2/base.html' %}
+
+{% block content %}
+
+<!-- Blog Posts -->
+    <section>
+            <div class="container py-7" id="blog-posts">
+                <div class="col-md-4">
+                    <div class="position-sticky" style="top: 2rem;">
+              
+                      <div>
+                        <h4 class="fst-italic">Read from our Numerous Articles</h4>
+                        <ul class="list-unstyled">
+                            {% for blog in blogs %}
+                          <li>
+                            <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="{% url 'blogpost' blog.pk %}">
+                                <img src="{{ blog.image_thumbnail.url }}" alt="{{ blog.post_title }}" class="bd-placeholder-img" width="100%" height="96">
+                              <!-- <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg> -->
+                              <div class="col-lg-8">
+                                <h6 class="mb-0">{{ blog.post_title }}</h6>
+                                <small class="text-body-secondary">{{ blog.post_date|date:"F d, Y" }}</small>
+                              </div>
+                            </a>
+                          </li>
+                          {% endfor %}
+                          <!-- <li>
+                            <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
+                              <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+                              <div class="col-lg-8">
+                                <h6 class="mb-0">This is another blog post title</h6>
+                                <small class="text-body-secondary">January 14, 2023</small>
+                              </div>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC3THKZ8tUXhqWuZ4ink0kskHcu0VpRnctoqRhax1dlw&s" width="100%" height="96" alt="Thumbnail">
+                                <div class="col-lg-8">
+                                    <h6 class="mb-0">Longer blog post title: This one has multiple lines!</h6>
+                                    <small class="text-body-secondary">January 13, 2023</small>
+                                </div>
+                            </a>
+                        </li>                         -->
+                        </ul>
+                      </div>
+                    </div>
+                <!-- Recent Posts Ends -->
+            </div>
+    </section>
+    
+    <!-- Blog Posts Ends -->
+    {% endblock content %}

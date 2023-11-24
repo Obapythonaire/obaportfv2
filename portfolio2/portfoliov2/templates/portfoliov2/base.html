@@ -1,0 +1,193 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!-- <html lang="en" data-bs-theme="auto"> -->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ personal_info.name }} - Software Engineer</title>
+    <!-- <meta name="description" content="{{ personal_info.header_description }}" /> -->
+    <meta name="description" content="{{ personal_info.header_description|default:'' }}" />
+    <meta name="keywords" content="{{ personal_info.header_keywords|default:'' }}" />
+    <meta name="author" content="{{ personal_info.name }}" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="{{ personal_info.name }} - Software Engineer" />
+    <meta property="og:description" content="{{ personal_info.header_description|default:'' }}" />
+    <meta property="og:image" content="{{ personal_info.profile_picture.url }}" />
+    <meta property="og:url" content="/" />
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ personal_info.name|default:'' }} - Software Engineer" />
+    <meta name="twitter:description" content="{{ personal_info.header_description|default:'' }}" />
+    <meta name="twitter:image" content="{{ personal_info.profile_picture.url }}" />
+
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ personal_info.favicon.url }}" type="image/x-icon" width="16" height="16" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        
+    <!-- Custom styles for this template -->
+    <link href="{% static 'portfoliov2/css/styles.css' %}" rel="stylesheet" type="text/css">
+
+    
+    <!-- For Suscriber and Contact us Pop-up forms -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10"> -->
+    <!-- Include jQuery from CDN -->
+    <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> -->
+
+    <!-- Load FonAwesome -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha384-jxjlgf5JOT9wItsCziNj/SYPI46SIvYvkwvTVIjACifKNXcdedCK9HdOKXXj8CA" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- For bootstrap icons -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.22.0/font/bootstrap-icons.css" rel="stylesheet">
+
+</head>
+
+<body data-bs-theme="light">
+
+    <main>
+        <div class="container ">
+            <nav class="navbar navbar-expand-md navbar-light">
+                <div class="container">
+                    <a href="/" class="navbar-brand d-flex align-items-center">
+                        <img src="{{ personal_info.profile_picture.url }}"
+                            alt="Abdulahi, SE" width="40" height="34" class="rounded-circle border border-white">
+                        <span class="fs-2">Abdulahi O.</span>
+                    </a>
+
+                    <!-- Toggle button for mobile (moved outside of the ul) -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active" aria-current="page">Home</a></li>
+                            <li class="nav-item"><a href="{% url 'home' %}#about-me" class="nav-link">About</a></li>
+                            <li class="nav-item"><a href="{% url 'home' %}#projects-section" class="nav-link">Projects</a></li>
+                            <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
+                            <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                        </ul>
+                        <!-- Moved the search form and toggle button outside of the ul -->
+                        <form class="d-flex" role="search" method="GET" action=" {% url 'home' %}">
+                            <input class="form-control me-2" type="text" placeholder="Search Site/Page" name="search_query" value="{{ request.GET.search_query }}"
+                                aria-label="Search">
+                            <button class="btn btn-outline-secondary" type="submit">Search</button>
+                        </form>
+                        <!-- <button id="modeToggle" class="btn btn-link">
+                            <i class="bi bi-moon"></i>
+                        </button> -->
+                        <!-- New toggle button -->
+                        <div class="form-check form-switch mx-4">
+                            <input
+                                class="form-check-input p-2"
+                                type="checkbox"
+                                role="switch"
+                                id="flexSwitchCheckChecked"
+                                checked
+                                onclick="myFunction()"
+                                />
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="b-example-divider"></div>
+    </main>
+    {% if search_query %}
+    <div class="container py-5" id="about-me">
+        <p>You Searched For: {{ search_query }}</p>
+        <h3>Search Results</h3>
+        {% for result in search_results %}
+        <ul>
+            {% if result.url %}
+            <li><a href="{{ result.url }}" target="_blank">{{ result }}</a></li>
+            {% else %}
+            <li>{{ result }}</li>
+            {% endif %}
+        </ul>
+        <!-- <a href="{% url 'home' %}?search_query={{result.name}}">{{result.name}}</a> -->
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% block content %}
+    
+
+    {% endblock %}
+    <!-- Footer -->
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                    <i class="fa fa-angle-double-up"></i>
+                </a>
+                <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2023 Abdulahi Ogundare, SD</span>
+            </div>
+
+            <div class="col-12 col-md-4 d-flex align-items-center flex-column">
+                <p class="text-body-secondary text-center mb-0">
+                    Subscribe to my newsletter for the latest updates and news.
+                </p>
+                <div class="messages">
+                    {% for message in messages %}
+                        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                <form class="input-group mt-2 mt-md-0" method="post" action="" enctype="multipart/form-data" id="subs_form">
+                    {% csrf_token %}
+                    <input type="email" class="form-control" placeholder="Enter your email" aria-label="Subscribe to newsletter" aria-describedby="button-addon" name="{{ subs_form.email.name }}" id="{{ subs_form.email.id_for_label }}">
+                    <div class="text-center mt-2">
+                        <button class="btn btn-secondary">Subscribe</button>
+                    </div>
+                </form>
+
+                <!-- <form class="input-group mt-2 mt-md-0" method="post" action="" enctype="multipart/form-data" id="subs_form" onsubmit="return subscribe(event);">
+                    {% csrf_token %}
+                    <input type="email" class="form-control" placeholder="Enter your email" aria-label="Subscribe to newsletter" aria-describedby="button-addon" name="{{ subs_form.email.name }}" id="{{ subs_form.email.id_for_label }}" value="{{ subs_form.email.value }}">
+                    <div class="text-center mt-2">
+                        <button type="submit" class="btn btn-secondary">Subscribe</button>
+                    </div>
+                </form> -->
+                
+            </div>
+
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                <li class="ms-3"><a class="text-body-secondary" href="{{ personal_info.twitter_link }}"><i class="fa fa-twitter"></i></a></li>
+                <li class="ms-3"><a class="text-body-secondary" href="{{ personal_info.linkedin_link }}"><i class="fa fa-linkedin"></i></a></li>
+                <li class="ms-3"><a class="text-body-secondary" href="{{ personal_info.github_link }}"><i class="fa fa-github"></i></a></li>
+                <li class="ms-3"><a class="text-body-secondary" href="{{ personal_info.facebook_link }}"><i class="fa fa-facebook"></i></a></li>
+                <li class="ms-3"><a class="text-body-secondary" href="{{ personal_info.whatsapp_link }}"><i class="fa fa-whatsapp"></i></a></li>
+                <li class="ms-3"><a class="text-body-secondary" href="mailto:abdulahogundare@gmail.com"><i class="fa fa-envelope"></i></a></li>
+            </ul>
+        </footer>
+    </div>
+
+
+
+      
+  
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <!-- For Suscriber and Contact us Pop-up forms -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> -->
+
+    <!-- Include jQuery from CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{% static 'portfoliov2/js/custom.js' %}"></script>
+
+</body>
+
+</html>
