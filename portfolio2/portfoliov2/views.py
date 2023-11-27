@@ -8,6 +8,7 @@ from django.http import JsonResponse
 
 import smtplib
 from email.message import EmailMessage
+from django.core.mail import send_mail
 from string import Template
 from pathlib import Path
 
@@ -181,7 +182,7 @@ def contactus(request):
             contactt.save()
             name = contactt.name
             mail = contactt.email
-            title = contactt.title
+            subject = contactt.title
             message = contactt.message
 
             # Addition to subscriber form starts
@@ -195,24 +196,68 @@ def contactus(request):
                     subscriber_form.save()
             # Addition to subscriber form ends
 
-            html = Template(Path('portfoliov2/contactmessage.html').read_text())
-            email = EmailMessage()
-            email['from'] = settings.EMAIL_HOST_USER
-            email['to'] = ['allschoolsinfo1@gmail.com', 'abdulahogundare21@gmail.com']
-            email['subject'] = contactt.title
-            email.content_subtype = 'html'
-            email.set_content(html.safe_substitute({'name': name, 'title': title, 'message': message, 'mail': mail}))
+            # html = Template(Path('portfoliov2/contactmessage.html').read_text())
+            # email = EmailMessage()
+            # email['from'] = settings.EMAIL_HOST_USER
+            # email['to'] = ['allschoolsinfo1@gmail.com', 'abdulahogundare21@gmail.com']
+            # email['subject'] = contactt.title
+            # email.content_subtype = 'html'
+            # email.set_content(html.safe_substitute({'name': name, 'title': title, 'message': message, 'mail': mail}))
 
-            with smtplib.SMTP('smtp-relay.brevo.com', 587) as smtp:
-                smtp.ehlo()
-                smtp.starttls()
-                smtp.ehlo()
-                smtp.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
-                smtp.send_message(email)
-                print('Message sent, Any other task?')
+            # with smtplib.SMTP('smtp-relay.brevo.com', 587) as smtp:
+            #     smtp.ehlo()
+            #     smtp.starttls()
+            #     smtp.ehlo()
+            #     smtp.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+            #     smtp.send_message(email)
+            #     print('Message sent, Any other task?')
             
-            # Add a success message
-            messages.success(request, 'Your message has been sent successfully!')
+            # # Add a success message
+            # messages.success(request, 'Your message has been sent successfully!')
+
+            # Construct email content directly
+            email_content =  f""" Their's a mail from {name} \n \n {message} \n \n \n Reply to: {mail}"""
+            # body = email_content
+            # # Create EmailMessage object
+            # email = EmailMessage(
+            #     subject,
+            #     body=body,
+            #     from_email=settings.EMAIL_HOST_USER,
+            #     to=['allschoolsinfo1@gmail.com', 'abdulahogundare21@gmail.com'],
+            # )
+            
+
+            try:
+                # Send the email using send_mail
+                send_mail(
+                    subject,
+                    email_content,
+                    settings.EMAIL_HOST_USER,
+                    ['allschoolsinfo1@gmail.com', 'abdulahogundare@gmail.com'],
+                    fail_silently=False,  # Set to True for production
+                )
+
+                messages.success(request, 'Your message has been sent successfully!')
+                print('Message sent, Any other task?')
+            except Exception as e:
+                messages.error(request, f'Error sending email: {str(e)}')
+                print(f'Error sending email: {str(e)}')
+
+
+            # Optional: Attach files if needed
+            # email.attach_file('/path/to/attachment.txt')
+
+            # Optional: Add headers or extra info
+            # email.extra_headers['Message-ID'] = 'custom-message-id'
+
+            # try:
+            #     # Send the email
+            #     email.send()
+            #     messages.success(request, 'Your message has been sent successfully!')
+            #     print('Message sent, Any other task?')
+            # except Exception as e:
+            #     messages.error(request, f'Error sending email: {str(e)}')
+            #     print(f'Error sending email: {str(e)}')
 
             # return redirect('home')
     else:

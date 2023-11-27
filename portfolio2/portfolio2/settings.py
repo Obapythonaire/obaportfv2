@@ -124,9 +124,9 @@ BASE_URL = 'http://127.0.0.1:8000'
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static')
+# ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # To serve media files
@@ -140,7 +140,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # For sendmail/mail config
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-relay.brevo.com'
+# EMAIL_HOST = 'smtp-relay.brevo.com'
 # EMAIL_HOST_USER = 'obatech518@gmail.com'
 EMAIL_PORT = 587
 # EMAIL_USE_SSL = True
@@ -148,16 +148,17 @@ EMAIL_USE_TLS = True  # TLS is required for Gmail
 EMAIL_HOST_USER = 'obatech518@gmail.com'
 # EMAIL_HOST_PASSWORD = 'jgyqgalbkyfwradc'
 
-EMAIL_HOST_PASSWORD = 'xsmtpsib-57a13e96f00a3547c19a91f8698afb40d4798a10e145582ecaddebee2b94d99a-XJPGHVfjz4O7n2QB'
+# EMAIL_HOST_PASSWORD = 'xsmtpsib-57a13e96f00a3547c19a91f8698afb40d4798a10e145582ecaddebee2b94d99a-CJYGtA7qTF9cyXDv'
+# EMAIL_HOST_PASSWORD = 'xsmtpsib-57a13e96f00a3547c19a91f8698afb40d4798a10e145582ecaddebee2b94d99a-XJPGHVfjz4O7n2QB'
 DEFAULT_FROM_EMAIL = 'abdulahiogundare@gmail.com'  # Replace with your email address
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_HOST_USER = 'obatech518@gmail.com'
-# EMAIL_HOST_PASSWORD = 'jgyqgalbkyfwradc'
+EMAIL_HOST_PASSWORD = 'ztpvtanpanynxvnx'
 # EMAIL_PORT = 465    #587
 # # EMAIL_USE_TLS = True
 # EMAIL_USE_SSL = True
-# DEFAULT_FROM_EMAIL = 'obatech518@gmail.com'
+DEFAULT_FROM_EMAIL = 'obatech518@gmail.com'
 
 # CKEditor configuration
 CKEDITOR_UPLOAD_PATH = "uploads/"
