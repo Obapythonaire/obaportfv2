@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-n$@*n#ri^gzswqb(t!%j2xr*3=@b=da32@s734@3$=kj8gy!ei"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['abdulahiogundare.pythonanywhere.com']
 
 
 # Application definition
@@ -118,20 +118,22 @@ USE_I18N = True
 
 USE_TZ = True
 
-BASE_URL = 'http://127.0.0.1:8000'
+BASE_URL = 'http://abdulahiogundare.pythonanywhere.com/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static')
+# ]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = '/home/abdulahiogundare/obaportfv2/portfolio2/static'
 
 # To serve media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/home/abdulahiogundare/obaportfv2/portfolio2/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -140,24 +142,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # For sendmail/mail config
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-relay.brevo.com'
+# EMAIL_HOST = 'smtp-relay.brevo.com'
 # EMAIL_HOST_USER = 'obatech518@gmail.com'
-EMAIL_PORT = 587
-# EMAIL_USE_SSL = True
 EMAIL_USE_TLS = True  # TLS is required for Gmail
+# EMAIL_HOST_PASSWORD = 'xsmtpsib-57a13e96f00a3547c19a91f8698afb40d4798a10e145582ecaddebee2b94d99a-CJYGtA7qTF9cyXDv'
+DEFAULT_FROM_EMAIL = 'abdulahogundare@gmail.com'  # Replace with your email address
+EMAIL_PORT = 587
 EMAIL_HOST_USER = 'obatech518@gmail.com'
-# EMAIL_HOST_PASSWORD = 'jgyqgalbkyfwradc'
-
-EMAIL_HOST_PASSWORD = 'xsmtpsib-57a13e96f00a3547c19a91f8698afb40d4798a10e145582ecaddebee2b94d99a-XJPGHVfjz4O7n2QB'
-DEFAULT_FROM_EMAIL = 'abdulahiogundare@gmail.com'  # Replace with your email address
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'obatech518@gmail.com'
-# EMAIL_HOST_PASSWORD = 'jgyqgalbkyfwradc'
-# EMAIL_PORT = 465    #587
-# # EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = True
-# DEFAULT_FROM_EMAIL = 'obatech518@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = 'ztpvtanpanynxvnx'
 
 # CKEditor configuration
 CKEDITOR_UPLOAD_PATH = "uploads/"
