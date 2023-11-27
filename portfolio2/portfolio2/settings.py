@@ -127,8 +127,12 @@ STATIC_URL = "/static/"
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static')
 # ]
+<<<<<<< HEAD
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = '/home/abdulahiogundare/obaportfv2/portfolio2/static'
+=======
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+>>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
 
 # To serve media files
 MEDIA_URL = '/media/'
@@ -149,8 +153,24 @@ EMAIL_USE_TLS = True  # TLS is required for Gmail
 DEFAULT_FROM_EMAIL = 'abdulahogundare@gmail.com'  # Replace with your email address
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'obatech518@gmail.com'
+<<<<<<< HEAD
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_PASSWORD = 'ztpvtanpanynxvnx'
+=======
+# EMAIL_HOST_PASSWORD = 'jgyqgalbkyfwradc'
+
+# EMAIL_HOST_PASSWORD = 'xsmtpsib-57a13e96f00a3547c19a91f8698afb40d4798a10e145582ecaddebee2b94d99a-CJYGtA7qTF9cyXDv'
+# EMAIL_HOST_PASSWORD = 'xsmtpsib-57a13e96f00a3547c19a91f8698afb40d4798a10e145582ecaddebee2b94d99a-XJPGHVfjz4O7n2QB'
+DEFAULT_FROM_EMAIL = 'abdulahiogundare@gmail.com'  # Replace with your email address
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'obatech518@gmail.com'
+EMAIL_HOST_PASSWORD = 'ztpvtanpanynxvnx'
+# EMAIL_PORT = 465    #587
+# # EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'obatech518@gmail.com'
+>>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
 
 # CKEditor configuration
 CKEDITOR_UPLOAD_PATH = "uploads/"

@@ -6,11 +6,19 @@ from django.conf import settings
 from django.contrib import messages
 # from django.http import JsonResponse
 
+<<<<<<< HEAD
 # import smtplib
 # from email.message import EmailMessage
 from django.core.mail import send_mail
 # from string import Template
 # from pathlib import Path
+=======
+import smtplib
+from email.message import EmailMessage
+from django.core.mail import send_mail
+from string import Template
+from pathlib import Path
+>>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
 
 from django.db.models import Q
 from itertools import chain
@@ -196,9 +204,13 @@ def contactus(request):
                     subscriber_form.save()
             # Addition to subscriber form ends
 
+<<<<<<< HEAD
 
             # The Below worked in development but not in deplowment hence the one up.
             # html = Template(Path('portfolio2/portfoliov2/contactmessage.html').read_text())
+=======
+            # html = Template(Path('portfoliov2/contactmessage.html').read_text())
+>>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
             # email = EmailMessage()
             # email['from'] = settings.EMAIL_HOST_USER
             # email['to'] = ['allschoolsinfo1@gmail.com', 'abdulahogundare21@gmail.com']
@@ -213,6 +225,7 @@ def contactus(request):
             #     smtp.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
             #     smtp.send_message(email)
             #     print('Message sent, Any other task?')
+<<<<<<< HEAD
 
             # # Add a success message
             # messages.success(request, 'Your message has been sent successfully!')
@@ -220,6 +233,23 @@ def contactus(request):
             # Checking if this will work
 
             email_content =  f""" Their's a mail from {name} \n \n {message} \n \n \n Reply to: {mail}"""
+=======
+            
+            # # Add a success message
+            # messages.success(request, 'Your message has been sent successfully!')
+
+            # Construct email content directly
+            email_content =  f""" Their's a mail from {name} \n \n {message} \n \n \n Reply to: {mail}"""
+            # body = email_content
+            # # Create EmailMessage object
+            # email = EmailMessage(
+            #     subject,
+            #     body=body,
+            #     from_email=settings.EMAIL_HOST_USER,
+            #     to=['allschoolsinfo1@gmail.com', 'abdulahogundare21@gmail.com'],
+            # )
+            
+>>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
 
             try:
                 # Send the email using send_mail
@@ -228,7 +258,11 @@ def contactus(request):
                     email_content,
                     settings.EMAIL_HOST_USER,
                     ['allschoolsinfo1@gmail.com', 'abdulahogundare@gmail.com'],
+<<<<<<< HEAD
                     fail_silently=True,  # Set to True for production
+=======
+                    fail_silently=False,  # Set to True for production
+>>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
                 )
 
                 messages.success(request, 'Your message has been sent successfully!')
@@ -236,6 +270,25 @@ def contactus(request):
             except Exception as e:
                 messages.error(request, f'Error sending email: {str(e)}')
                 print(f'Error sending email: {str(e)}')
+<<<<<<< HEAD
+=======
+
+
+            # Optional: Attach files if needed
+            # email.attach_file('/path/to/attachment.txt')
+
+            # Optional: Add headers or extra info
+            # email.extra_headers['Message-ID'] = 'custom-message-id'
+
+            # try:
+            #     # Send the email
+            #     email.send()
+            #     messages.success(request, 'Your message has been sent successfully!')
+            #     print('Message sent, Any other task?')
+            # except Exception as e:
+            #     messages.error(request, f'Error sending email: {str(e)}')
+            #     print(f'Error sending email: {str(e)}')
+>>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
 
             # return redirect('home')
     else:
