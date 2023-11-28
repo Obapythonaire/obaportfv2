@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ, dj_database_url
+
+# Load environment variables from .env
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-n$@*n#ri^gzswqb(t!%j2xr*3=@b=da32@s734@3$=kj8gy!ei"
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['abdulahiogundare.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -80,12 +85,16 @@ WSGI_APPLICATION = "portfolio2.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+DATABASE_URL = env("DATABASE_URL")
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': dj_database_url.config(default=env('DATABASE_URL'))
     }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 
 # Password validation
@@ -118,7 +127,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-BASE_URL = 'http://abdulahiogundare.pythonanywhere.com/'
+BASE_URL = 'http://127.0.0.1:8000'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -127,15 +136,11 @@ STATIC_URL = "/static/"
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static')
 # ]
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_ROOT = '/home/abdulahiogundare/obaportfv2/portfolio2/static'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # To serve media files
 MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_ROOT = '/home/abdulahiogundare/obaportfv2/portfolio2/media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -143,24 +148,25 @@ MEDIA_ROOT = '/home/abdulahiogundare/obaportfv2/portfolio2/media'
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # For sendmail/mail config
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = env('EMAIL_BACKEND')
 # EMAIL_HOST = 'smtp-relay.brevo.com'
 # EMAIL_HOST_USER = 'obatech518@gmail.com'
-EMAIL_PORT = 587
+EMAIL_PORT = env('EMAIL_PORT')
 # EMAIL_USE_SSL = True
-EMAIL_USE_TLS = True  # TLS is required for Gmail
-EMAIL_HOST_USER = 'obatech518@gmail.com'
+EMAIL_USE_TLS = env('EMAIL_USE_TLS')  # TLS is required for Gmail
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 # EMAIL_HOST_PASSWORD = 'jgyqgalbkyfwradc'
 
 # EMAIL_HOST_PASSWORD = 'xsmtpsib-57a13e96f00a3547c19a91f8698afb40d4798a10e145582ecaddebee2b94d99a-CJYGtA7qTF9cyXDv'
 # EMAIL_HOST_PASSWORD = 'xsmtpsib-57a13e96f00a3547c19a91f8698afb40d4798a10e145582ecaddebee2b94d99a-XJPGHVfjz4O7n2QB'
-DEFAULT_FROM_EMAIL = 'abdulahiogundare@gmail.com'  # Replace with your email address
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')  # Replace with your email address
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = env('EMAIL_HOST')
 # EMAIL_HOST_USER = 'obatech518@gmail.com'
-EMAIL_HOST_PASSWORD = 'ztpvtanpanynxvnx'
-DEFAULT_FROM_EMAIL = 'obatech518@gmail.com'
-
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+# EMAIL_PORT = 465    #587
+# # EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True
 
 # CKEditor configuration
 CKEDITOR_UPLOAD_PATH = "uploads/"
