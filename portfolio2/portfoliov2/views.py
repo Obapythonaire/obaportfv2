@@ -1,28 +1,20 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import PersonalInfo, Project, BlogPost, Newsletter
 import os, csv
 from django.conf import settings
 # from django.core.mail import send_mail
 from django.contrib import messages
-# from django.http import JsonResponse
+from django.http import JsonResponse
 
-<<<<<<< HEAD
-# import smtplib
-# from email.message import EmailMessage
-from django.core.mail import send_mail
-# from string import Template
-# from pathlib import Path
-=======
 import smtplib
 from email.message import EmailMessage
 from django.core.mail import send_mail
 from string import Template
 from pathlib import Path
->>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
 
 from django.db.models import Q
 from itertools import chain
-# from django.template.loader import render_to_string
+from django.template.loader import render_to_string
 
 from portfoliov2.forms import ContactMessageForm, SubscriberForm  # Import the ModelForm
 from reportlab.pdfgen import canvas  #For Subscribers PDF generation
@@ -48,17 +40,17 @@ def common_data(request):
         Q(degree__icontains=search_query) |
         Q(description__icontains=search_query)
     )
-
+    
     search_results_internship = personal_info.internship.filter(
         Q(company__icontains=search_query) |
         Q(role__icontains=search_query) |
         Q(description__icontains=search_query)
     )
-
+    
     search_results_tech_stack = personal_info.tech_stack.filter(
         Q(name__icontains=search_query)
     )
-
+ 
     search_results_project = Project.objects.filter(
         Q(title__icontains=search_query) |
         Q(category__icontains=search_query)
@@ -96,15 +88,15 @@ def common_data(request):
                 if not Newsletter.objects.filter(email=subscriber_email).exists():
                     # If it doesn't exist, save the subscriber and update the file, CSV, and PDF
                     subs_form.save()
-
-
+                
+                
                     # subscriber = subs_form.cleaned_data['email']
 
                     # Append to SubscribersList.txt
                     file_path = os.path.join(settings.MEDIA_ROOT, 'SubscribersList.txt' )
                     try:
                         with open(file_path, mode='a') as file:
-
+                            
                             file.write(subscriber_email + ',\n')  # Write the subscriber's email followed by a comma and a new line
 
                     except IOError as e:
@@ -136,7 +128,7 @@ def common_data(request):
                     # If the email already exists, show an error message
                     messages.error(request, 'Email already exists in the newsletter.')
                     # return JsonResponse({'message': 'error'})
-
+            
             except Exception as e:
                 # Handle other exceptions and set an error message
                 messages.error(request, f'An error occurred: {str(e)}')
@@ -147,7 +139,7 @@ def common_data(request):
 
     else:
         subs_form = SubscriberForm()
-    # Subscriber ends
+    # Subscriber ends 
 
     # Blog Starts
     blogs = BlogPost.objects.all().order_by('-post_date')[:10]
@@ -172,11 +164,11 @@ def common_data(request):
 
 def home(request):
 
-    context_data = common_data(request)
-    # print(context_data.search_results)
+    context_data = common_data(request) 
+    # print(context_data.search_results)  
     return render(request, 'portfoliov2/home.html', context_data)
 
-def contactus(request):
+def contactus(request): 
     form = None
     contactt = None
     # subscriber = None
@@ -204,13 +196,7 @@ def contactus(request):
                     subscriber_form.save()
             # Addition to subscriber form ends
 
-<<<<<<< HEAD
-
-            # The Below worked in development but not in deplowment hence the one up.
-            # html = Template(Path('portfolio2/portfoliov2/contactmessage.html').read_text())
-=======
             # html = Template(Path('portfoliov2/contactmessage.html').read_text())
->>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
             # email = EmailMessage()
             # email['from'] = settings.EMAIL_HOST_USER
             # email['to'] = ['allschoolsinfo1@gmail.com', 'abdulahogundare21@gmail.com']
@@ -225,15 +211,6 @@ def contactus(request):
             #     smtp.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
             #     smtp.send_message(email)
             #     print('Message sent, Any other task?')
-<<<<<<< HEAD
-
-            # # Add a success message
-            # messages.success(request, 'Your message has been sent successfully!')
-
-            # Checking if this will work
-
-            email_content =  f""" Their's a mail from {name} \n \n {message} \n \n \n Reply to: {mail}"""
-=======
             
             # # Add a success message
             # messages.success(request, 'Your message has been sent successfully!')
@@ -249,7 +226,6 @@ def contactus(request):
             #     to=['allschoolsinfo1@gmail.com', 'abdulahogundare21@gmail.com'],
             # )
             
->>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
 
             try:
                 # Send the email using send_mail
@@ -258,11 +234,7 @@ def contactus(request):
                     email_content,
                     settings.EMAIL_HOST_USER,
                     ['allschoolsinfo1@gmail.com', 'abdulahogundare@gmail.com'],
-<<<<<<< HEAD
-                    fail_silently=True,  # Set to True for production
-=======
                     fail_silently=False,  # Set to True for production
->>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
                 )
 
                 messages.success(request, 'Your message has been sent successfully!')
@@ -270,8 +242,6 @@ def contactus(request):
             except Exception as e:
                 messages.error(request, f'Error sending email: {str(e)}')
                 print(f'Error sending email: {str(e)}')
-<<<<<<< HEAD
-=======
 
 
             # Optional: Attach files if needed
@@ -288,7 +258,6 @@ def contactus(request):
             # except Exception as e:
             #     messages.error(request, f'Error sending email: {str(e)}')
             #     print(f'Error sending email: {str(e)}')
->>>>>>> 40830f9fbe5460bdf5a599f89868ab203e5dc90f
 
             # return redirect('home')
     else:
@@ -297,7 +266,7 @@ def contactus(request):
 
     context_data = common_data(request)
     contact_form_data = {'form': form}
-    context_data.update(contact_form_data)
+    context_data.update(contact_form_data)        
     return render(request, 'portfoliov2/contactus.html', context_data)
 
 
@@ -306,7 +275,7 @@ def blog(request):
 
     context_data = common_data(request)
     blogs_data = {'blogs': blogs}
-    context_data.update(blogs_data)
+    context_data.update(blogs_data)  
     return render(request, 'portfoliov2/blog.html', context_data)
 
 
@@ -315,5 +284,5 @@ def blog_single_post(request, pk):
 
     context_data = common_data(request)
     blogpost_data = {'blogpost': blogpost}
-    context_data.update(blogpost_data)
+    context_data.update(blogpost_data)    
     return render(request, 'portfoliov2/blogpost.html', context_data)
