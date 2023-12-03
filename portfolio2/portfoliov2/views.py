@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import PersonalInfo, Project, BlogPost, Newsletter
+from .models import PersonalInfo, Project, BlogPost, Newsletter,Comment, TechStack
 import os, csv
 from django.conf import settings
 # from django.core.mail import send_mail
 from django.contrib import messages
 from django.http import JsonResponse
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import smtplib
 from email.message import EmailMessage
@@ -16,19 +18,30 @@ from django.db.models import Q
 from itertools import chain
 from django.template.loader import render_to_string
 
-from portfoliov2.forms import ContactMessageForm, SubscriberForm  # Import the ModelForm
+from portfoliov2.forms import ContactMessageForm, SubscriberForm, CommentForm  # Import the ModelForm
 from reportlab.pdfgen import canvas  #For Subscribers PDF generation
 
 # Create your views here.
 
-def common_data(request):
+def common_data(request, title='Abdulahi Ogundare, Software Engineer', thumbnail=None):
 
     personal_info = PersonalInfo.objects.first()
-    education = personal_info.education.all()
-    internship = personal_info.internship.all()
-    tech_stack = personal_info.tech_stack.all()
+    # Access related Education instances
+    # education = personal_info.educations.order_by('-id')
 
-    projects = Project.objects.all()
+    # # Access related WorkExperience instances
+    # work_experience = personal_info.work_experiences.order_by('-id')
+
+    # # Access related TechStack instances
+    # tech_stack = personal_info.tech_stacks.order_by('-id')[:4]
+
+    education = personal_info.education.order_by('-id')
+    work_experience = personal_info.work_experience.order_by('-id')
+    tech_stack = personal_info.tech_stack.order_by('-id')
+    # stack_tech = TechStack.objects.all()
+    # print("Tech Stack Count:", stack_tech.count())
+
+    projects = Project.objects.all().order_by('-id')[:6]
 
     # Search bar code begins
     # search_query = request.GET.get('query', '')
@@ -41,7 +54,7 @@ def common_data(request):
         Q(description__icontains=search_query)
     )
     
-    search_results_internship = personal_info.internship.filter(
+    search_results_work_experience = personal_info.work_experience.filter(
         Q(company__icontains=search_query) |
         Q(role__icontains=search_query) |
         Q(description__icontains=search_query)
@@ -66,7 +79,7 @@ def common_data(request):
     search_results = list(
         chain(
             search_results_education,
-            search_results_internship,
+            search_results_work_experience,
             search_results_tech_stack,
             search_results_project,
             search_results_blog_post,
@@ -149,22 +162,22 @@ def common_data(request):
     return {
         'personal_info': personal_info,
         'education': education,
-        'internship': internship,
+        'work_experience': work_experience,
         'tech_stack': tech_stack,
         'projects': projects,
         'blogs': blogs,
         'subs_form': subs_form,
         'search_results':search_results,
         'search_query': search_query,
+        'title': title,
+        'thumbnail': thumbnail,  # Include the 'thumbnail' variable in the context
     }
-
-    # if search_query:
-    #     return render(request, 'portfoliov2/search_results.html', context)
-    # else:
 
 def home(request):
 
-    context_data = common_data(request) 
+    # context_data = common_data(request)
+    personal_info = PersonalInfo.objects.first()
+    context_data = common_data(request, title='Abdulahi Ogundare, Software Engineer', thumbnail=personal_info.profile_picture.url)
     # print(context_data.search_results)  
     return render(request, 'portfoliov2/home.html', context_data)
 
@@ -266,23 +279,125 @@ def contactus(request):
 
     context_data = common_data(request)
     contact_form_data = {'form': form}
-    context_data.update(contact_form_data)        
+    context_data.update(contact_form_data)
+    context_data = common_data(request, title='Contact Us', thumbnail='/media/contactus.png')      
     return render(request, 'portfoliov2/contactus.html', context_data)
 
 
 def blog(request):
     blogs = BlogPost.objects.all().order_by('-post_date')
 
-    context_data = common_data(request)
-    blogs_data = {'blogs': blogs}
+    # Pagination codes
+    page = request.GET.get('page', 1)
+    paginator = Paginator(blogs, 5) #Shows 5 blogposts per page
+    try:
+        paginated_blogs = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_blogs = paginator.page(1)
+    except EmptyPage:
+        paginated_blogs = paginator.page(paginator.num_pages)
+
+    # context_data = common_data(request)
+    context_data = common_data(request, title='Blog', thumbnail='/media/blog.png')
+    blogs_data = {'blogs': paginated_blogs}
     context_data.update(blogs_data)  
+    
     return render(request, 'portfoliov2/blog.html', context_data)
 
 
 def blog_single_post(request, pk):
     blogpost = get_object_or_404(BlogPost, pk=pk)
 
+    comments = Comment.objects.filter(blog_post=blogpost)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.blog_post = blogpost
+            comment.save()
+            return redirect('blogpost', pk=blogpost.pk)
+    else:
+        form = CommentForm()
+
+    is_superuser = request.user.is_authenticated and request.user.is_superuser
+
     context_data = common_data(request)
-    blogpost_data = {'blogpost': blogpost}
-    context_data.update(blogpost_data)    
+    context_data = common_data(request, title=blogpost.post_title, thumbnail=blogpost.image_thumbnail.url)
+    single_blog_data = {'blogpost': blogpost, 'comments': comments, 'form': form, 'is_superuser': is_superuser}
+    # blogpost_data = {'blogpost': blogpost}
+    context_data.update(single_blog_data)    
     return render(request, 'portfoliov2/blogpost.html', context_data)
+
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+
+    # Check if the user is a superuser
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        # Redirect or handle unauthorized access as needed
+        return redirect('blogpost', pk=comment.blog_post.pk)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('blogpost', pk=comment.blog_post.pk)
+    else:
+        form = CommentForm(instance=comment)
+
+    context_data = common_data(request)
+    edit_comment_data = {'comment': comment, 'form': form}
+    context_data.update(edit_comment_data) 
+
+    return render(request, 'portfoliov2/edit_comment.html', context_data)
+
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+
+    # Check if the user is a superuser
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        # Redirect or handle unauthorized access as needed
+        return redirect('blogpost', pk=comment.blog_post.pk)
+
+    if request.method == 'POST':
+        comment.delete()
+        return redirect('blogpost', pk=comment.blog_post.pk)
+
+    context_data = common_data(request)
+    delete_comment_data = {'comment': comment}
+    context_data.update(delete_comment_data) 
+    return render(request, 'portfoliov2/delete_comment.html', context_data)
+
+def projects(request):
+    projects = Project.objects.all().order_by('-posted_date')
+
+    # Pagination codes
+    page = request.GET.get('page', 1)
+    paginator = Paginator(projects, 5) #Shows 5 blogposts per page
+    try:
+        paginated_projects = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_projects = paginator.page(1)
+    except EmptyPage:
+        paginated_projects = paginator.page(paginator.num_pages)
+
+
+    context_data = common_data(request, title='Projects', thumbnail='/media/project.png')
+    projects_data = {'projects': paginated_projects}
+    context_data.update(projects_data)  
+    
+    return render(request, 'portfoliov2/projects.html', context_data)
+
+from django.http import JsonResponse
+
+def upvote_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    comment.upvotes += 1
+    comment.save()
+    return JsonResponse({'upvotes': comment.upvotes})
+
+def downvote_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    comment.downvotes += 1
+    comment.save()
+    return JsonResponse({'downvotes': comment.downvotes})

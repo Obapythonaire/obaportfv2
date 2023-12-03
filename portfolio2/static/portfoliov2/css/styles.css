@@ -158,4 +158,9 @@ color: #155724;
 background-color: #f8d7da;
 border-color: #f5c6cb;
 color: #721c24;
-        } 
+} 
+
+.blog-thumbnail {
+    max-width: 100%;
+    height: auto;
+}

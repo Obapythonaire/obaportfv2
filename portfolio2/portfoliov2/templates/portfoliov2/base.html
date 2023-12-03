@@ -4,9 +4,16 @@
 <html lang="en">
 
 <head>
+    <!-- <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <!-- basic -->
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ personal_info.name }} - Software Engineer</title>
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <title>{{ title }}</title>
     <!-- <meta name="description" content="{{ personal_info.header_description }}" /> -->
     <meta name="description" content="{{ personal_info.header_description|default:'' }}" />
     <meta name="keywords" content="{{ personal_info.header_keywords|default:'' }}" />
@@ -15,16 +22,20 @@
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
     <!-- Open Graph Tags -->
-    <meta property="og:title" content="{{ personal_info.name }} - Software Engineer" />
+    <meta property="og:title" content="{{ title }} - Software Engineer" />
     <meta property="og:description" content="{{ personal_info.header_description|default:'' }}" />
-    <meta property="og:image" content="{{ personal_info.profile_picture.url }}" />
+    {% if thumbnail %}
+        <meta property="og:image" content="{{ thumbnail }}" />
+    {% endif %}
     <meta property="og:url" content="/" />
 
     <!-- Twitter Card Tags -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{{ personal_info.name|default:'' }} - Software Engineer" />
+    <meta name="twitter:title" content="{{ title }}" />
     <meta name="twitter:description" content="{{ personal_info.header_description|default:'' }}" />
-    <meta name="twitter:image" content="{{ personal_info.profile_picture.url }}" />
+    {% if thumbnail %}
+        <meta name="twitter:image" content="{{ thumbnail }}" />
+    {% endif %}
 
 
     <!-- Favicon -->
@@ -55,7 +66,7 @@
 <body data-bs-theme="light">
 
     <main>
-        <div class="container ">
+        <div class="container " id="top">
             <nav class="navbar navbar-expand-md navbar-light">
                 <div class="container">
                     <a href="/" class="navbar-brand d-flex align-items-center">
@@ -73,7 +84,7 @@
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active" aria-current="page">Home</a></li>
                             <li class="nav-item"><a href="{% url 'home' %}#about-me" class="nav-link">About</a></li>
-                            <li class="nav-item"><a href="{% url 'home' %}#projects-section" class="nav-link">Projects</a></li>
+                            <li class="nav-item"><a href="{% url 'projects' %}" class="nav-link">Projects</a></li>
                             <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
                             <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
                         </ul>
@@ -97,6 +108,10 @@
                                 onclick="myFunction()"
                                 />
                         </div>
+                        <!-- Scroll to Bottom Button -->
+                        <a href="javascript:void(0);" onclick="scrollToBottom()" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                            <i class="fa fa-angle-double-down"></i>
+                        </a>
                     </div>
                 </div>
             </nav>
@@ -128,7 +143,12 @@
     <div class="container">
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
             <div class="col-md-4 d-flex align-items-center">
-                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                <!-- <a href="{% url 'home' %}#top" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                    <i class="fa fa-angle-double-up"></i>
+                </a> -->
+
+                <!-- Scroll to Top Button -->
+                <a href="javascript:void(0);" onclick="scrollToTop()" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
                     <i class="fa fa-angle-double-up"></i>
                 </a>
                 <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2023 Abdulahi Ogundare, SD</span>
@@ -187,6 +207,18 @@
     <!-- Include jQuery from CDN -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="{% static 'portfoliov2/js/custom.js' %}"></script>
+
+    <script>
+        function scrollToTop() {
+            document.body.scrollTop = 0;  // For Safari
+            document.documentElement.scrollTop = 0;  // For Chrome, Firefox, IE, and Opera
+        }
+
+        function scrollToBottom() {
+        document.body.scrollTop = document.body.scrollHeight;  // For Safari
+        document.documentElement.scrollTop = document.documentElement.scrollHeight;  // For Chrome, Firefox, IE, and Opera
+        }
+    </script>
 
 </body>
 

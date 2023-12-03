@@ -23,26 +23,50 @@
                             </a>
                           </li>
                           {% endfor %}
-                          <!-- <li>
-                            <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
-                              <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
-                              <div class="col-lg-8">
-                                <h6 class="mb-0">This is another blog post title</h6>
-                                <small class="text-body-secondary">January 14, 2023</small>
-                              </div>
-                            </a>
-                          </li>
-                          <li>
-                            <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC3THKZ8tUXhqWuZ4ink0kskHcu0VpRnctoqRhax1dlw&s" width="100%" height="96" alt="Thumbnail">
-                                <div class="col-lg-8">
-                                    <h6 class="mb-0">Longer blog post title: This one has multiple lines!</h6>
-                                    <small class="text-body-secondary">January 13, 2023</small>
-                                </div>
-                            </a>
-                        </li>                         -->
                         </ul>
                       </div>
+                    
+                      <!-- Pagination -->
+                      {% if blogs.has_other_pages %}
+                      <nav aria-label="Page navigation container">
+                        <ul class="pagination justify-content-center">
+                          {% if blogs.has_previous %}
+                          <li class="page-item"><a href="?page={{ blogs.previous_page_number }}" class="page-link">&laquo; PREV </a></li>
+                          {% endif %}
+                      
+                          {% for i in blogs.paginator.page_range %}
+                          {% if blogs.number == i %}
+                          <li class="page-item active"><span class="page-link">{{ i }}<span class="sr-only">(current)</span></span></li>
+                          {% else %}
+                          <li class="page-item"><a href="?page={{ i }}" class="page-link">{{ i }}</a></li>
+                          {% endif %}
+                          {% endfor %}
+                      
+                          {% if blogs.has_next %}
+                          <li class="page-item"><a href="?page={{ blogs.next_page_number }}" class="page-link">NEXT &raquo;</a></li>
+                          {% endif %}
+                        </ul>
+                      </nav>
+                      {% endif %}
+                    <!-- Another -->
+                    <!-- <div class="pagination">
+                        <span class="step-links">
+                            {% if blogs.has_previous %}
+                                <a href="?page=1">&laquo; first</a>
+                                <a href="?page={{ blogs.previous_page_number }}">previous</a>
+                            {% endif %}
+    
+                            <span class="current">
+                                Page {{ blogs.number }} of {{ blogs.paginator.num_pages }}.
+                            </span>
+    
+                            {% if blogs.has_next %}
+                                <a href="?page={{ blogs.next_page_number }}">next</a>
+                                <a href="?page={{ blogs.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div> -->
+                  
                     </div>
                 <!-- Recent Posts Ends -->
             </div>

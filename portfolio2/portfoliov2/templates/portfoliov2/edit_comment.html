@@ -1,0 +1,71 @@
+{% extends 'portfoliov2/base.html' %}
+
+{% block content %}
+    <!-- Article Starts -->
+    <section class="container">
+        <div class="container px-4 py-5" id="custom-cards">
+            <div class="row g-5">
+                <div class="col-md-12"></div>
+
+                <!-- Blog Comments start -->
+                <section>
+                    <!-- Back Button -->
+                    <a href="javascript:history.back()" class="btn btn-secondary mb-3">Back</a>
+                    <!-- Comment form 2 -->
+                    <!-- Your Custom Comment Form -->
+                    <h2>Edit Comment</h2>
+                    <div class="col-md-8 card mb-4 mt-3">
+                        <div class="card-body">
+                            <form method="post" action="">
+                                {% csrf_token %}
+
+                                <!-- Add your own input fields for the comment form -->
+                                <div class="mb-3">
+                                    <!-- <label for="comment-name" class="form-label">Name</label> -->
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="comment-name"
+                                        name="{{ form.comment.name.name }}"
+                                        placeholder="Your Name"
+                                        required
+                                        style="width: 250px; display: inline-block;"
+                                        value="{{ comment.name }}"
+                                    />
+
+                                    <!-- <label for="comment-email" class="form-label" style="margin-left: 10px;">Email</label> -->
+                                    <input
+                                        type="email"
+                                        class="form-control"
+                                        id="comment-email"
+                                        name="{{ form.email.name }}"
+                                        placeholder="Your Email"
+                                        required
+                                        style="width: 300px; display: inline-block;"
+                                        value="{{ comment.email }}"
+                                    />
+                                </div>
+
+                                <div class="mb-3">
+                                    <textarea
+                                        class="form-control"
+                                        id="comment-text"
+                                        name="{{ form.text.name }}"
+                                        rows="3"
+                                        placeholder="Enter your comment"
+                                        required
+                                        style="width: 400px; height: 300px;"
+                                    >{{ comment.text }}</textarea>
+                                </div>
+
+                                <input type="submit" class="btn btn-primary" value="Edit Comment">
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                <!-- Blog Comments Ends -->
+            </div>
+        </div>
+    </section>
+    <!-- Blog Comments start -->
+{% endblock content %}

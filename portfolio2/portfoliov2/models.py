@@ -1,17 +1,18 @@
 from django.db import models
-from django.utils import timezone
-from datetime import timedelta
+# from django.utils import timezone
+# from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
 from ckeditor_uploader.fields import RichTextUploadingField
 # from ckeditor.fields import RichTextField
+# from ckeditor.widgets import CKEditorWidget
 
 
 # For Newsletter
-from django.core.mail import EmailMessage
-from django.dispatch import receiver
-from django.db.models.signals import post_save
+# from django.core.mail import EmailMessage
+# from django.dispatch import receiver
+# from django.db.models.signals import post_save
 from django.conf import settings
-import os
+# import os
 
 # Create your models here.
 class Education(models.Model):
@@ -19,21 +20,24 @@ class Education(models.Model):
     degree = models.CharField(max_length=100)
     graduation_year = models.PositiveIntegerField()
     description = models.TextField()
+    # personal_info = models.ForeignKey('PersonalInfo', on_delete=models.CASCADE, related_name='educations', null=True, blank=True)
 
     def __str__(self):
         return self.institution
     
-class Internship(models.Model):
+class WorkExperience(models.Model):
     company = models.CharField(max_length=100)
     role = models.CharField(max_length=100)
     duration = models.CharField(max_length=50)
     description = models.TextField()
+    # personal_info = models.ForeignKey('PersonalInfo', on_delete=models.CASCADE, related_name='work_experiences', null=True, blank=True)
 
     def __str__(self):
         return self.company
 
 class TechStack(models.Model):
     name = models.CharField(max_length=100)
+    # personal_info = models.ForeignKey('PersonalInfo', on_delete=models.CASCADE, related_name='tech_stacks', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -44,7 +48,7 @@ class PersonalInfo(models.Model):
     favicon = models.ImageField(upload_to='images/')
     introduction = models.TextField()
     education = models.ManyToManyField(Education)
-    internship = models.ManyToManyField(Internship)
+    work_experience = models.ManyToManyField(WorkExperience)
     tech_stack = models.ManyToManyField(TechStack)
     cv_link = models.FileField(upload_to='documents/')
     twitter_link = models.URLField(null=True, blank=True)
@@ -116,7 +120,7 @@ class BlogPost(models.Model):
     )
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
     post_author = models.CharField(max_length=100, default='Abdulahi')
-    post_author_url = models.URLField(default='https://twitter.com/Sdecipher')
+    post_author_url = models.URLField(default='https://twitter.com/SDecipherer')
     post_title = models.CharField(
         _("Blog Title"), max_length=250,
         null=False, blank=False)
@@ -132,8 +136,6 @@ class BlogPost(models.Model):
     def __str__(self):
         return self.post_title
     
-
-
 
     def get_absolute_url(self):
         # Define the logic to generate the URL for the blog post
@@ -160,7 +162,6 @@ class BlogPost(models.Model):
 #         email.send()
 #         print('Blog post sent to all subscribers')
 
-
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
@@ -170,4 +171,18 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.name} ({self.email})"
-    
+
+class Comment(models.Model):
+    blog_post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    # text = models.TextField()
+    text = RichTextUploadingField(config_name='limited_config')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # New fields for upvotes and downvotes
+    upvotes = models.PositiveIntegerField(default=0)
+    downvotes = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.name} - {self.name} ({self.email})"
